@@ -66,9 +66,7 @@ Revisio est packagé sous forme d'image Docker publique "Plug & Play". La base d
 "" mkdir revisio && cd revisio ""
 
 Créez un fichier docker-compose.yml et collez ce contenu :
-"""
-YAML
-version: '3.8'
+```yaml
 
 services:
   revisio:
@@ -77,10 +75,10 @@ services:
     ports:
       - "10450:3000"
     volumes:
-      - ./data:/app/data
-      - ./uploads:/app/uploads
+      - ./revisio-data:/app/data
+      - ./revisio-uploads:/app/uploads
     restart: unless-stopped
-"""
+```
 Lancez l'application :
 
 """docker-compose up -d"""
