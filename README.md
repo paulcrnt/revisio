@@ -63,7 +63,9 @@ Revisio est packagé sous forme d'image Docker publique "Plug & Play". La base d
 
 1. Créez un dossier pour le projet et placez-vous dedans :
 
-"" mkdir revisio && cd revisio ""
+```yaml 
+mkdir revisio && cd revisio
+```
 
 Créez un fichier docker-compose.yml et collez ce contenu :
 ```yaml
@@ -81,7 +83,9 @@ services:
 ```
 Lancez l'application :
 
-"""docker-compose up -d"""
+```yaml
+docker-compose up -d
+```
 
 Ouvrez votre navigateur et accédez à : http://localhost:10450 (ou l'IP de votre serveur).
 
