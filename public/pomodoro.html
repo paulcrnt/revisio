@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro - Revisio</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/pomodoro.css">
+</head>
+<body style="overflow-y: auto; height: auto; min-height: 100vh;">
+    <div class="pomodoro-container">
+        <div class="pomodoro-header">
+            <h2>🍅 Technique Pomodoro</h2>
+            <button class="btn btn-secondary" onclick="openSettingsModal()">
+                ⚙️ Réglages
+            </button>
+        </div>
+
+        <div class="pomodoro-main">
+            <!-- État actuel -->
+            <div class="session-status">
+                <h3 id="session-type">Session de travail</h3>
+                <p id="session-number">Pomodoro #1</p>
+            </div>
+
+            <!-- Chronomètre principal -->
+            <div class="timer-display">
+                <div class="timer-circle">
+                    <span id="timer-text">25:00</span>
+                </div>
+            </div>
+
+            <!-- Barre de progression avec effet de vague -->
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div id="progress-bar" class="progress-bar">
+                        <div class="wave"></div>
+                    </div>
+                </div>
+                <span id="progress-text">0%</span>
+            </div>
+
+            <!-- Contrôles -->
+            <div class="controls">
+                <button class="btn-control btn-start" id="start-btn" onclick="startTimer()">
+                    ▶️ Démarrer
+                </button>
+                <button class="btn-control btn-pause" id="pause-btn" onclick="pauseTimer()" style="display: none;">
+                    ⏸️ Pause
+                </button>
+                <button class="btn-control btn-reset" onclick="resetTimer()">
+                    🔄 Réinitialiser
+                </button>
+                <button class="btn-control btn-skip" onclick="skipSession()">
+                    ⏭️ Passer
+                </button>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon">🍅</div>
+                    <div class="stat-content">
+                        <span class="stat-label">Pomodoros complétés</span>
+                        <span class="stat-value" id="completed-count">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-content">
+                        <span class="stat-label">Temps total</span>
+                        <span class="stat-value" id="total-time">0h 0min</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-content">
+                        <span class="stat-label">Série actuelle</span>
+                        <span class="stat-value" id="streak-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de réglages -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>⚙️ Réglages Pomodoro</h3>
+                <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-tabs">
+                    <button class="settings-tab active" onclick="showSettingsTab('preset')">
+                        📋 Préréglages
+                    </button>
+                    <button class="settings-tab" onclick="showSettingsTab('custom')">
+                        🎨 Personnalisé
+                    </button>
+                </div>
+
+                <!-- Préréglages -->
+                <div id="preset-settings" class="settings-content">
+                    <h4>Choisir un préréglage</h4>
+                    <div class="preset-grid">
+                        <div class="preset-card" onclick="applyPreset('classic')">
+                            <h5>🍅 Classique</h5>
+                            <p>Travail: 25 min</p>
+                            <p>Pause courte: 5 min</p>
+                            <p>Pause longue: 15 min</p>
+                        </div>
+                        <div class="preset-card" onclick="applyPreset('short')">
+                            <h5>⚡ Court</h5>
+                            <p>Travail: 15 min</p>
+                            <p>Pause courte: 3 min</p>
+                            <p>Pause longue: 10 min</p>
+                        </div>
+                        <div class="preset-card" onclick="applyPreset('long')">
+                            <h5>📚 Long</h5>
+                            <p>Travail: 50 min</p>
+                            <p>Pause courte: 10 min</p>
+                            <p>Pause longue: 30 min</p>
+                        </div>
+                        <div class="preset-card" onclick="applyPreset('intense')">
+                            <h5>🔥 Intensif</h5>
+                            <p>Travail: 90 min</p>
+                            <p>Pause courte: 15 min</p>
+                            <p>Pause longue: 45 min</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personnalisé -->
+                <div id="custom-settings" class="settings-content" style="display: none;">
+                    <h4>Configuration personnalisée</h4>
+                    
+                    <div class="form-group">
+                        <label for="work-duration">⏱️ Durée de travail (minutes)</label>
+                        <input type="number" id="work-duration" min="1" max="120" value="25">
+                        <input type="range" id="work-slider" min="1" max="120" value="25" oninput="syncSlider('work')">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="short-break-duration">☕ Pause courte (minutes)</label>
+                        <input type="number" id="short-break-duration" min="1" max="30" value="5">
+                        <input type="range" id="short-break-slider" min="1" max="30" value="5" oninput="syncSlider('short-break')">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="long-break-duration">🌴 Pause longue (minutes)</label>
+                        <input type="number" id="long-break-duration" min="1" max="60" value="15">
+                        <input type="range" id="long-break-slider" min="1" max="60" value="15" oninput="syncSlider('long-break')">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="long-break-interval">🔢 Pause longue après (pomodoros)</label>
+                        <input type="number" id="long-break-interval" min="2" max="10" value="4">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="auto-start-breaks" checked>
+                            Démarrer automatiquement les pauses
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="auto-start-work" checked>
+                            Démarrer automatiquement le travail après pause
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sound-enabled" checked>
+                            Activer les notifications sonores
+                        </label>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="applyCustomSettings()">
+                        ✅ Appliquer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification de fin -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <h3 id="notification-title">🎉 Session terminée !</h3>
+            <p id="notification-message">Temps de faire une pause</p>
+            <button class="btn btn-primary" onclick="closeNotification()">OK</button>
+        </div>
+    </div>
+
+    <script src="js/pomodoro.js"></script>
+</body>
+</html>

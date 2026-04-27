@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisio - App de Révision</title>
+    <link rel="stylesheet" href="css/main.css">
+    <!-- Favicon classique -->
+    <link rel="icon" type="image/png" sizes="32x32" href="192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="192.png">
+
+    <!-- Android / PWA -->
+    <link rel="icon" sizes="192x192" href="192.png">
+    <link rel="icon" sizes="512x512" href="512.png">
+
+    <!-- iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="192.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header avec navigation par onglets -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">📚 Revisio</h1>
+                <nav class="tabs">
+                    <button class="tab active" data-tab="todo" onclick="switchTab('todo')">
+                        ✅ To Do List
+                    </button>
+                    <button class="tab" data-tab="hub" onclick="switchTab('hub')">
+                        📖 Hub des Matières
+                    </button>
+                    <button class="tab" data-tab="pomodoro" onclick="switchTab('pomodoro')">
+                        🍅 Pomodoro
+                    </button>
+		    <button class="tab" data-tab="mind" onclick="switchTab('mind')">
+                        🧠 Cartes Mentales
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Container pour les différentes pages -->
+        <main class="main-content">
+            <iframe id="content-frame" src="todo.html" frameborder="0"></iframe>
+        </main>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Mettre à jour les onglets actifs
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            // Charger la page correspondante
+            const iframe = document.getElementById('content-frame');
+            
+            if (tab === 'todo') {
+                iframe.src = 'todo.html';
+            } else if (tab === 'hub') {
+                iframe.src = 'hub.html';
+            } else if (tab === 'pomodoro') {
+                iframe.src = 'pomodoro.html';
+            } else if (tab === 'mind') {
+                iframe.src = 'mind.html';
+            }
+        }
+
+        // Ajuster la hauteur de l'iframe
+        window.addEventListener('resize', adjustIframeHeight);
+        
+        function adjustIframeHeight() {
+ 	   const iframe = document.getElementById('content-frame');
+    	   const header = document.querySelector('.header');
+   	   const headerHeight = header.offsetHeight;
+   	   iframe.style.minHeight = `calc(100vh - ${headerHeight}px)`;
+    	   iframe.style.height = 'auto';  // Hauteur automatique
+    	   iframe.style.overflow = 'auto';
+	}
+
+        // Appeler au chargement
+        adjustIframeHeight();
+    </script>
+</body>
+</html>

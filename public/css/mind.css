@@ -1,0 +1,194 @@
+/* =========================================================
+   STRUCTURE PRINCIPALE (Fix pour Mobile & Mode Paysage)
+   ========================================================= */
+
+.hub-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh; /* Hauteur dynamique pour éviter les bugs avec la barre d'adresse mobile */
+    overflow: hidden;
+    background: var(--bg-main);
+}
+
+.hub-header {
+    flex-shrink: 0; /* Empêche l'en-tête d'être écrasé par le contenu */
+}
+
+.hub-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    flex: 1; /* Prend tout l'espace restant sous le header */
+    min-height: 0; /* Crucial : permet au contenu interne de scroller sans casser Flexbox */
+    overflow: hidden;
+}
+
+/* =========================================================
+   ESPACE DE TRAVAIL & CANVAS
+   ========================================================= */
+
+.mindmap-workspace {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-main);
+    cursor: grab;
+}
+
+.mindmap-workspace:active {
+    cursor: grabbing;
+}
+
+/* Conteneur mobile (gère le pan et le zoom) */
+.mindmap-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3000px; /* Grand espace virtuel */
+    height: 3000px;
+    transform-origin: 0 0;
+    /* Joli motif de grille en pointillé pour se repérer */
+    background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+/* Le SVG pour les liens */
+#links-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Laisse passer les clics vers le fond */
+    z-index: 1;
+}
+
+.link-line {
+    stroke: var(--primary);
+    stroke-width: 3px;
+    fill: none;
+    opacity: 0.6;
+    transition: stroke 0.3s ease;
+}
+
+/* =========================================================
+   STYLE DES BULLES (NŒUDS)
+   ========================================================= */
+
+.mindmap-node {
+    position: absolute;
+    min-width: 120px;
+    max-width: 250px;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-align: center;
+    z-index: 10;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: var(--shadow-md);
+    transition: box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-wrap: break-word;
+}
+
+.mindmap-node:hover {
+    border-color: var(--primary-light);
+}
+
+.mindmap-node.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2); /* Halo Revisio */
+    z-index: 20;
+}
+
+.mindmap-node.linking {
+    border-style: dashed;
+    border-color: var(--secondary); /* Rose pour indiquer la liaison */
+}
+
+/* Édition de texte dans la bulle */
+.node-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+    resize: none;
+}
+
+/* =========================================================
+   TOOLBAR & BOUTONS
+   ========================================================= */
+
+.mindmap-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: nowrap; /* Empêche de passer sur 2 lignes */
+    overflow-x: auto; /* Permet le scroll horizontal sur mobile */
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Cache la scrollbar sur Firefox */
+}
+
+.mindmap-toolbar::-webkit-scrollbar {
+    display: none; /* Cache la scrollbar sur Chrome/Safari */
+}
+
+.tool-btn {
+    flex-shrink: 0; /* Empêche les boutons de s'écraser */
+}
+
+.tool-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* =========================================================
+   RESPONSIVE (MOBILE & PAYSAGE)
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .mindmap-toolbar {
+        width: 100%;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .tool-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Mode paysage sur téléphone (écrans peu hauts) */
+@media (max-height: 500px) {
+    .hub-header {
+        padding: 0.3rem 1rem; /* Réduit drastiquement l'encombrement */
+    }
+    
+    .hub-header h2 {
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .mindmap-node {
+        padding: 0.75rem; /* Des bulles un peu plus compactes en mode paysage */
+    }
+}

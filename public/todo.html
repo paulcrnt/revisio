@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List - Revisio</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/todo.css">
+    <link rel="icon" href="revisiologo.png" type="png">
+     <!-- Icône pour iOS (iPhone/iPad) -->
+    <link rel="apple-touch-icon" href="logoalphabet.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="revisiologo.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="revisiologo.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="revisiologo.png">
+    <link rel="manifest" href="manifest.json">
+    <!-- Icône pour Android -->
+    <link rel="icon" sizes="192x192" href="revisiologo.png">
+    <link rel="icon" sizes="512x512" href="revisiologo.png">
+</head>
+<body style="overflow-y: auto; height: auto; min-height: 100vh;">
+    <div class="todo-container">
+        <div class="todo-header">
+            <h2>📝 To Do List</h2>
+            <button class="btn btn-primary" onclick="openAddTaskModal()">
+                <span>+</span> Nouvelle tâche
+            </button>
+        </div>
+
+        <div class="kanban-board">
+            <!-- Colonne À faire -->
+            <div class="kanban-column" data-status="todo">
+                <div class="column-header">
+                    <h3>📌 A faire</h3>
+                    <span class="task-count" id="count-todo">0</span>
+                </div>
+                <div class="column-content" id="column-todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Les cards seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Colonne En cours -->
+            <div class="kanban-column" data-status="inprogress">
+                <div class="column-header">
+                    <h3>⚡ En cours</h3>
+                    <span class="task-count" id="count-inprogress">0</span>
+                </div>
+                <div class="column-content" id="column-inprogress" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Les cards seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Colonne Fait -->
+            <div class="kanban-column" data-status="done">
+                <div class="column-header">
+                    <h3>✅ Fait</h3>
+                    <span class="task-count" id="count-done">0</span>
+                </div>
+                <div class="column-content" id="column-done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Les cards seront ajoutées ici dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter/modifier une tâche -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nouvelle tâche</h3>
+                <button class="close-btn" onclick="closeTaskModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="task-title">Titre *</label>
+                    <input type="text" id="task-title" placeholder="Ex: Réviser le chapitre 3" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-description">Description</label>
+                    <textarea id="task-description" rows="3" placeholder="Détails de la tâche..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-subject">Matière</label>
+                        <input type="text" id="task-subject" placeholder="Ex: Mathématiques" list="subjects-list">
+                        <datalist id="subjects-list"></datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task-color">Couleur</label>
+                        <div class="color-picker">
+                            <input type="color" id="task-color" value="#6366f1">
+                            <div class="color-presets">
+                                <button type="button" class="color-preset" style="background: #6366f1" onclick="setColor('#6366f1')"></button>
+                                <button type="button" class="color-preset" style="background: #ec4899" onclick="setColor('#ec4899')"></button>
+                                <button type="button" class="color-preset" style="background: #10b981" onclick="setColor('#10b981')"></button>
+                                <button type="button" class="color-preset" style="background: #f59e0b" onclick="setColor('#f59e0b')"></button>
+                                <button type="button" class="color-preset" style="background: #ef4444" onclick="setColor('#ef4444')"></button>
+                                <button type="button" class="color-preset" style="background: #3b82f6" onclick="setColor('#3b82f6')"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-status">Statut</label>
+                    <select id="task-status">
+                        <option value="todo">Non fait</option>
+                        <option value="inprogress">Lecture</option>
+                        <option value="done">Acquis</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTaskModal()">Annuler</button>
+                <button class="btn btn-danger" id="delete-task-btn" onclick="deleteTask()" style="display: none;">Supprimer</button>
+                <button class="btn btn-primary" onclick="saveTask()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/todo.js"></script>
+</body>
+</html>

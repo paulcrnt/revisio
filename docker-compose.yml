@@ -1,0 +1,12 @@
+kversion: '3.8'
+
+services:
+  revisio:
+    image: paulcrnt/revisio:latest 
+    container_name: revisio
+    ports:
+      - "10450:3000" 
+    volumes:
+      - ./revisio-data:/app/data
+      - ./revisio-uploads:/app/uploads
+    restart: unless-stopped

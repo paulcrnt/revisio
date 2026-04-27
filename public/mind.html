@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cartes Mentales - Revisio</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/hub.css">
+    <link rel="stylesheet" href="css/mind.css">
+</head>
+<body style="overflow: hidden;">
+    <div class="hub-container">
+	<div class="hub-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+                <h2>🧠 Cartes Mentales</h2>
+            </div>
+            
+            <div class="mindmap-toolbar" id="mindmap-toolbar" style="display: none;">
+                <button class="btn btn-secondary tool-btn active" id="tool-pan" onclick="setMode('pan')" title="Naviguer">🖐️ Naviguer</button>
+                <button class="btn btn-secondary tool-btn" id="tool-select" onclick="setMode('select')" title="Sélectionner">👆 Sélectionner</button>
+                <button class="btn btn-primary tool-btn" onclick="addNode()" title="Nouvelle idée"><span>+</span> Ajouter</button>
+                <button class="btn btn-secondary tool-btn" id="tool-link" onclick="setMode('link')" title="Lier">🔗 Lier</button>
+                <button class="btn btn-danger tool-btn" onclick="deleteSelected()" title="Supprimer">🗑️</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="openAddMapModal()">
+                <span>+</span> Nouvelle carte
+            </button>
+        </div>
+
+        <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <div class="hub-layout">
+            <aside class="subjects-sidebar">
+                <h3>Mes Cartes</h3>
+                <div id="mindmaps-list" class="subjects-list">
+                    </div>
+            </aside>
+
+            <main class="mindmap-workspace" id="workspace">
+                <div id="empty-state" class="empty-state-hub">
+                    <div class="empty-icon">🗺️</div>
+                    <h3>Aucune carte sélectionnée</h3>
+                    <p>Créez une nouvelle carte mentale ou sélectionnez-en une dans la liste</p>
+                </div>
+
+                <div id="active-workspace" style="display: none; width: 100%; height: 100%;">
+                    <div class="mindmap-canvas" id="canvas-container">
+                        <svg id="links-svg"></svg>
+                        </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/mind.js"></script>
+
+    <div id="mapModal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Nouvelle carte mentale</h3>
+                <button class="close-btn" onclick="closeAddMapModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="map-name-input">Nom de la carte *</label>
+                    <input type="text" id="map-name-input" placeholder="Ex: Anatomie du Chien" required>
+                </div>
+                <div class="form-group">
+                    <label for="map-color-input">Couleur</label>
+                    <input type="color" id="map-color-input" value="#ec4899">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddMapModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="saveMap()">Créer</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

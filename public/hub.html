@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub des Matières - Revisio</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/hub.css">
+     <!-- Icône pour iOS (iPhone/iPad) -->
+    <link rel="apple-touch-icon" href="logoalphabet.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="revisiologo.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="revisiologo.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="revisiologo.png">
+    <link rel="manifest" href="manifest.json">
+    <!-- Icône pour Android -->
+    <link rel="icon" sizes="192x192" href="revisiologo.png">
+    <link rel="icon" sizes="512x512" href="revisiologo.png">
+</head>
+<body style="overflow-y: auto; height: auto; min-height: 100vh;">
+    <div class="hub-container">
+	<div class="hub-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleSidebar()">
+                    ☰
+                </button>
+                <h2>📚 Hub des Matières</h2>
+            </div>
+            <button class="btn btn-primary" onclick="openAddSubjectModal()">
+                <span>+</span> Nouvelle matière
+            </button>
+        </div>
+	<div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+        <!-- Sidebar avec liste des matières -->
+        <div class="hub-layout">
+            <aside class="subjects-sidebar">
+                <h3>Mes Matières</h3>
+                <div id="subjects-list" class="subjects-list">
+                    <!-- Les matières seront ajoutées ici -->
+                </div>
+            </aside>
+
+            <!-- Zone de contenu principal -->
+            <main class="hub-content">
+                <div id="empty-state" class="empty-state-hub">
+                    <div class="empty-icon">📖</div>
+                    <h3>Aucune matière sélectionnée</h3>
+                    <p>Créez une nouvelle matière ou sélectionnez-en une dans la liste</p>
+                </div>
+
+                <div id="subject-content" class="subject-content" style="display: none;">
+                    <div class="subject-header">
+                        <h2 id="subject-name">Mathématiques</h2>
+                        <div class="subject-actions">
+                            <button class="btn btn-secondary" onclick="editSubject()">✏️ Modifier</button>
+                            <button class="btn btn-danger" onclick="deleteSubject()">🗑️ Supprimer</button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary add-block-btn" onclick="openAddBlockModal()">
+                        <span>+</span> Ajouter un bloc
+                    </button>
+
+                    <div id="blocks-container" class="blocks-container">
+                        <!-- Les blocs seront ajoutés ici -->
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter/modifier une matière -->
+    <div id="subjectModal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3 id="subject-modal-title">Nouvelle matière</h3>
+                <button class="close-btn" onclick="closeSubjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="subject-name-input">Nom de la matière *</label>
+                    <input type="text" id="subject-name-input" placeholder="Ex: Mathématiques" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject-color-input">Couleur</label>
+                    <div class="color-picker">
+                        <input type="color" id="subject-color-input" value="#6366f1">
+                        <div class="color-presets">
+                            <button type="button" class="color-preset" style="background: #6366f1" onclick="setSubjectColor('#6366f1')"></button>
+                            <button type="button" class="color-preset" style="background: #ec4899" onclick="setSubjectColor('#ec4899')"></button>
+                            <button type="button" class="color-preset" style="background: #10b981" onclick="setSubjectColor('#10b981')"></button>
+                            <button type="button" class="color-preset" style="background: #f59e0b" onclick="setSubjectColor('#f59e0b')"></button>
+                            <button type="button" class="color-preset" style="background: #ef4444" onclick="setSubjectColor('#ef4444')"></button>
+                            <button type="button" class="color-preset" style="background: #3b82f6" onclick="setSubjectColor('#3b82f6')"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSubjectModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="saveSubject()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter un bloc -->
+    <!-- Modal pour ajouter un bloc -->
+<div id="blockTypeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Choisir le type de bloc</h3>
+            <button class="close-btn" onclick="closeBlockTypeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="block-types-grid">
+                <div class="block-type-card" onclick="selectBlockType('text')">
+                    <div class="block-type-icon">📝</div>
+                    <h4>Texte</h4>
+                    <p>Texte riche avec formatage</p>
+                </div>
+                <div class="block-type-card" onclick="selectBlockType('list')">
+                    <div class="block-type-icon">📋</div>
+                    <h4>Liste</h4>
+                    <p>Liste à puces ou numérotée</p>
+                </div>
+                <div class="block-type-card" onclick="selectBlockType('drawing')">
+                    <div class="block-type-icon">🎨</div>
+                    <h4>Dessin</h4>
+                    <p>Canvas de dessin libre</p>
+                </div>
+                <div class="block-type-card" onclick="selectBlockType('image')">
+                    <div class="block-type-icon">🖼️</div>
+                    <h4>Image</h4>
+                    <p>Upload d'image</p>
+                </div>
+                <div class="block-type-card" onclick="selectBlockType('quote')">
+                    <div class="block-type-icon">💬</div>
+                    <h4>Citation</h4>
+                    <p>Citation ou note importante</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal pour éditer un bloc -->
+    <div id="blockEditModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="block-edit-title">Éditer le bloc</h3>
+                <button class="close-btn" onclick="closeBlockEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="block-edit-content">
+                    <!-- Le contenu sera injecté dynamiquement selon le type de bloc -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBlockEditModal()">Annuler</button>
+                <button class="btn btn-danger" onclick="deleteCurrentBlock()">Supprimer</button>
+                <button class="btn btn-primary" onclick="saveBlock()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/hub.js"></script>
+    <div id="imageLightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <button class="lightbox-prev" onclick="changeLightboxImage(-1)" title="Précédente">&#10094;</button>
+        <img class="lightbox-content" id="lightbox-img">
+        <button class="lightbox-next" onclick="changeLightboxImage(1)" title="Suivante">&#10095;</button>
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+</body>
+</html>
