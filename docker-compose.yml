@@ -1,5 +1,3 @@
-kversion: '3.8'
-
 services:
   revisio:
     image: paulcrnt/revisio:latest 
